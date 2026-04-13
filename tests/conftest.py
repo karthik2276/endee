@@ -16,7 +16,17 @@ sys.modules["transformers"] = mock_stub
 sys.modules["torch"] = mock_stub
 sys.modules["endee"] = mock_stub
 
+# -----------------------------------------------------------------------------
+# Pytest Configuration
+# -----------------------------------------------------------------------------
 pytest_plugins = ("pytest_asyncio",)
+
+def pytest_configure(config):
+    """
+    Configure pytest-asyncio to avoid 'auto' mode warnings and errors in CI.
+    """
+    config.option.asyncio_mode = "auto"
+    config.option.asyncio_default_fixture_loop_scope = "function"
 
 @pytest.fixture(autouse=True)
 def mock_app_dependencies(monkeypatch):

@@ -84,12 +84,4 @@ target_link_libraries(${NDD_BINARY_NAME} PRIVATE
     pthread
 )
 
-# Symlink: build/ndd -> the actual binary
-add_custom_command(TARGET ${NDD_BINARY_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E create_symlink
-        $<TARGET_FILE_NAME:${NDD_BINARY_NAME}>
-        ${CMAKE_BINARY_DIR}/ndd
-    COMMENT "Creating symlink: ndd -> ${NDD_BINARY_NAME}"
-)
-
 message(STATUS "Endee ${PROJECT_VERSION} — binary: ${NDD_BINARY_NAME}")
