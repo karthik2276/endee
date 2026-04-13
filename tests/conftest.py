@@ -26,7 +26,11 @@ def pytest_configure(config):
     Configure pytest-asyncio to avoid 'auto' mode warnings and errors in CI.
     """
     config.option.asyncio_mode = "auto"
-    config.option.asyncio_default_fixture_loop_scope = "function"
+    try:
+        config.option.asyncio_default_fixture_loop_scope = "function"
+    except Exception:
+        # Fallback for older pytest-asyncio versions
+        pass
 
 @pytest.fixture(autouse=True)
 def mock_app_dependencies(monkeypatch):
