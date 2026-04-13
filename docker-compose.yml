@@ -1,8 +1,14 @@
 version: "3.9"
 
 services:
+  # --- Vector Database (Endee Engine) ---
   endee:
     image: endee-oss:latest
+    build:
+      context: .
+      dockerfile: ./infra/Dockerfile
+      args:
+        BUILD_ARCH: avx2  # Can be overridden with --build-arg
     ports:
       - "8080:8080"
     ulimits:
@@ -11,15 +17,43 @@ services:
         hard: 100000
     environment:
       NDD_NUM_THREADS: 0
-      NDD_AUTH_TOKEN: ""
     volumes:
       - endee-data:/data
     restart: unless-stopped
     logging:
       driver: "json-file"
       options:
-        max-size: "200m"
-        max-file: "5"
+        max-size: "20m"
+        max-file: "3"
+
+  # --- AI Backend (FastAPI) ---
+  backend:
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - ENDEE_DB_PATH=./data/complaints.jsonl
+      - CORS_ORIGIN=http://localhost
+      - EMBEDDING_MODEL=all-MiniLM-L6-v2
+      - LLM_MODEL=google/flan-t5-base
+    depends_on:
+      - endee
+    volumes:
+      - ./data:/app/data  # Sharing the local data dir for persistence
+    restart: unless-stopped
+
+  # --- Frontend (React + Nginx) ---
+  frontend:
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
 
 volumes:
   endee-data:

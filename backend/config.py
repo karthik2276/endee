@@ -14,7 +14,7 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    endee_db_path: str = "../data/complaints.jsonl"
+    endee_db_path: str = "./data/complaints.jsonl"
     embedding_model: str = "all-MiniLM-L6-v2"
     llm_model: str = "google/flan-t5-base"
     llm_max_new_tokens: int = 256
