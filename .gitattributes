@@ -1,0 +1,28 @@
+# Handle line endings automatically for the project
+* text=auto
+
+# Shell scripts must keep LF (they run on Linux/macOS)
+*.sh text eol=lf
+
+# Force LF for all text files tracked by git
+*.py   text eol=lf
+*.ts   text eol=lf
+*.tsx  text eol=lf
+*.css  text eol=lf
+*.html text eol=lf
+*.json text eol=lf
+*.md   text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
+*.txt  text eol=lf
+*.toml text eol=lf
+*.env  text eol=lf
+
+# Binary files — no line ending conversion
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.ico  binary
+*.woff binary
+*.woff2 binary
+*.ttf  binary
